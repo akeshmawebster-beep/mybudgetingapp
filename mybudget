@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,4 +108,1868 @@
 
     button.secondary {
       background: #6c757d;
+    }
+
+    button.danger {
+      background: #dc3545;
+    }
+
+    button.warning {
+      background: #ffc107;
+      color: #222;
+    }
+
+    button.blue {
+      background: #0d6efd;
+    }
+
+    button.small {
+      width: auto;
+      padding: 8px 12px;
+      margin: 2px;
+      font-size: 13px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .message {
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      display: none;
+      text-align: center;
+    }
+
+    .message.success {
+      display: block;
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .message.error {
+      display: block;
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .message.info {
+      display: block;
+      background: #cff4fc;
+      color: #055160;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .user-info {
+      color: #555;
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      width: auto;
+      margin: 0;
+      padding: 8px 15px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .summary-box {
+      padding: 18px;
+      border-radius: 10px;
+      text-align: center;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+    }
+
+    .summary-box h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: #555;
+    }
+
+    .summary-box strong {
+      font-size: 23px;
+    }
+
+    .income {
+      color: #198754;
+    }
+
+    .expense {
+      color: #dc3545;
+    }
+
+    .balance {
+      color: #0d6efd;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 15px;
+      align-items: end;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .button-row button {
+      width: auto;
+      margin: 0;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 750px;
+    }
+
+    th,
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #f1f3f5;
+    }
+
+    tr:hover {
+      background: #fafafa;
+    }
+
+    .amount-income {
+      color: #198754;
+      font-weight: bold;
+    }
+
+    .amount-expense {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 25px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+
+    .account-note {
+      font-size: 13px;
+      color: #777;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 23px;
+      }
+
+      .container {
+        width: 94%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>My Private Budget</h1>
+    <p>Manage your income and expenses</p>
+  </header>
+
+  <!-- =========================
+       LOGIN / ACCOUNT SECTION
+       ========================= -->
+  <div id="authSection" class="container">
+
+    <div class="card auth-box">
+
+      <h2 id="authTitle">Sign In</h2>
+
+      <div id="authMessage" class="message"></div>
+
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Your email"
+        autocomplete="email"
+      >
+
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Your password"
+        autocomplete="current-password"
+      >
+
+      <button id="authButton" onclick="handleAuth()">
+        Sign In
+      </button>
+
+      <button
+        id="toggleAuthButton"
+        class="secondary"
+        onclick="toggleAuthMode()"
+      >
+        Create account
+      </button>
+
+      <p id="authHelp">
+        Sign in to access your private budget.
+      </p>
+
+    </div>
+  </div>
+
+
+  <!-- =========================
+       MAIN APPLICATION
+       ========================= -->
+  <div id="appSection" class="hidden">
+
+    <div class="container">
+
+      <!-- Account bar -->
+      <div class="card">
+
+        <div class="top-bar">
+
+          <div>
+            <strong>My Budget</strong>
+            <div class="user-info" id="loggedInUser"></div>
+          </div>
+
+          <button
+            class="danger logout-btn"
+            onclick="logout()"
+          >
+            Log Out
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- Add transaction -->
+      <div class="card">
+
+        <h2 id="formTitle">Add Transaction</h2>
+
+        <div id="appMessage" class="message"></div>
+
+        <div class="form-grid">
+
+          <div class="full-width">
+            <label for="title">Title</label>
+            <input
+              type="text"
+              id="title"
+              placeholder="e.g. Monthly salary"
+            >
+          </div>
+
+          <div>
+            <label for="amount">Amount (£)</label>
+            <input
+              type="number"
+              id="amount"
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+            >
+          </div>
+
+          <div>
+            <label for="type">Type</label>
+            <select id="type">
+              <option value="Income">Income</option>
+              <option value="Expense">Expense</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="category">Category</label>
+            <select id="category">
+              <option value="Salary">Salary</option>
+              <option value="Bills">Bills</option>
+              <option value="Expenses">Expenses</option>
+              <option value="Savings">Savings</option>
+              <option value="Miscellaneous">Miscellaneous</option>
+              <option value="Transportation">Transportation</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="transactionDate">Date</label>
+            <input
+              type="date"
+              id="transactionDate"
+            >
+          </div>
+
+        </div>
+
+        <br>
+
+        <div class="button-row">
+
+          <button
+            id="saveButton"
+            onclick="saveTransaction()"
+          >
+            Add Transaction
+          </button>
+
+          <button
+            id="cancelEditButton"
+            class="secondary hidden"
+            onclick="cancelEdit()"
+          >
+            Cancel Edit
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- Month filter -->
+      <div class="card">
+
+        <h2>Budget Summary</h2>
+
+        <div class="filters">
+
+          <div>
+            <label for="monthFilter">
+              Filter by Month
+            </label>
+
+            <input
+              type="month"
+              id="monthFilter"
+              onchange="renderAll()"
+            >
+          </div>
+
+          <button
+            class="secondary"
+            onclick="clearMonthFilter()"
+          >
+            Show All
+          </button>
+
+        </div>
+
+        <br>
+
+        <div class="summary">
+
+          <div class="summary-box">
+            <h3>Total Income</h3>
+            <strong
+              id="totalIncome"
+              class="income"
+            >
+              £0.00
+            </strong>
+          </div>
+
+          <div class="summary-box">
+            <h3>Total Expenses</h3>
+            <strong
+              id="totalExpenses"
+              class="expense"
+            >
+              £0.00
+            </strong>
+          </div>
+
+          <div class="summary-box">
+            <h3>Balance</h3>
+            <strong
+              id="balance"
+              class="balance"
+            >
+              £0.00
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Export / backup -->
+      <div class="card">
+
+        <h2>Export & Backup</h2>
+
+        <div class="button-row">
+
+          <button
+            class="blue"
+            onclick="exportExcel()"
+          >
+            Export to Excel
+          </button>
+
+          <button
+            class="secondary"
+            onclick="backupJSON()"
+          >
+            Backup JSON
+          </button>
+
+        </div>
+
+        <p class="account-note">
+          Your transactions are stored securely in your Supabase account.
+        </p>
+
+      </div>
+
+
+      <!-- Transaction history -->
+      <div class="card">
+
+        <h2>Transaction History</h2>
+
+        <div
+          id="loading"
+          class="loading hidden"
+        >
+          Loading transactions...
+        </div>
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="transactionTable">
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE SETTINGS
+   =========================================================
+
+   Replace these two values with your own Supabase details.
+
+   SUPABASE_URL:
+   Supabase Dashboard
+   → Project Settings
+   → API
+   → Project URL
+
+   SUPABASE_KEY:
+   Supabase Dashboard
+   → Project Settings
+   → API
+   → Publishable key / anon key
+
+   NEVER put your Supabase service-role/secret key here.
+   ========================================================= */
+
+const SUPABASE_URL = "sb_secret_IbpHIbuWK3Vcu1AKQJRXVQ_z8Mjtyuk";
+
+const SUPABASE_KEY = "sb_publishable_o0AQq3DS5Cm1g3KjD2vqpw_jQLyQeF6";
+
+
+/* Create Supabase client */
+
+const { createClient } = supabase;
+
+const db = createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================================================
+   APPLICATION VARIABLES
+   ========================================================= */
+
+let currentUser = null;
+
+let transactions = [];
+
+let editingId = null;
+
+let authMode = "signin";
+
+
+/* =========================================================
+   PAGE STARTUP
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", async function() {
+
+  /*
+    Set today's date automatically.
+  */
+
+  document.getElementById("transactionDate").value =
+    getToday();
+
+  /*
+    Check whether a user is already logged in.
+  */
+
+  const { data, error } = await db.auth.getSession();
+
+  if (error) {
+    console.error(error);
+    showAuthMessage(
+      "Unable to check your login.",
+      "error"
+    );
+    return;
+  }
+
+  if (data.session) {
+
+    currentUser = data.session.user;
+
+    await showApp();
+
+  } else {
+
+    showLogin();
+
+  }
+
+
+  /*
+    Listen for login/logout changes.
+  */
+
+  db.auth.onAuthStateChange(
+    async function(event, session) {
+
+      if (session) {
+
+        currentUser = session.user;
+
+        await showApp();
+
+      } else {
+
+        currentUser = null;
+
+        transactions = [];
+
+        showLogin();
+
+      }
+
+    }
+  );
+
+});
+
+
+/* =========================================================
+   AUTHENTICATION
+   ========================================================= */
+
+
+/*
+  Switch between Sign In and Create Account.
+*/
+
+function toggleAuthMode() {
+
+  clearAuthMessage();
+
+  if (authMode === "signin") {
+
+    authMode = "signup";
+
+    document.getElementById("authTitle").textContent =
+      "Create Account";
+
+    document.getElementById("authButton").textContent =
+      "Create Account";
+
+    document.getElementById("toggleAuthButton").textContent =
+      "Back to Sign In";
+
+    document.getElementById("authHelp").textContent =
+      "Create an account to keep your budget private.";
+
+  } else {
+
+    authMode = "signin";
+
+    document.getElementById("authTitle").textContent =
+      "Sign In";
+
+    document.getElementById("authButton").textContent =
+      "Sign In";
+
+    document.getElementById("toggleAuthButton").textContent =
+      "Create account";
+
+    document.getElementById("authHelp").textContent =
+      "Sign in to access your private budget.";
+
+  }
+
+}
+
+
+/*
+  Handle either Sign In or Create Account.
+*/
+
+async function handleAuth() {
+
+  clearAuthMessage();
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+
+  if (!email) {
+
+    showAuthMessage(
+      "Please enter your email address.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (!password) {
+
+    showAuthMessage(
+      "Please enter your password.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (password.length < 6) {
+
+    showAuthMessage(
+      "Your password must be at least 6 characters.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const button =
+    document.getElementById("authButton");
+
+  button.disabled = true;
+
+
+  try {
+
+    if (authMode === "signin") {
+
+      /*
+        SIGN IN
+      */
+
+      const { data, error } =
+        await db.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      currentUser = data.user;
+
+      showAuthMessage(
+        "Signed in successfully.",
+        "success"
+      );
+
+
+      /*
+        The auth listener will also show the app.
+      */
+
+    } else {
+
+      /*
+        CREATE ACCOUNT
+      */
+
+      const { data, error } =
+        await db.auth.signUp({
+          email: email,
+          password: password
+        });
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      /*
+        Supabase may require email confirmation.
+      */
+
+      if (data.session) {
+
+        currentUser = data.user;
+
+        showAuthMessage(
+          "Account created successfully.",
+          "success"
+        );
+
+      } else {
+
+        showAuthMessage(
+          "Account created. Please check your email and confirm your account before signing in.",
+          "success"
+        );
+
+      }
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    showAuthMessage(
+      getAuthErrorMessage(error),
+      "error"
+    );
+
+  } finally {
+
+    button.disabled = false;
+
+  }
+
+}
+
+
+/*
+  Convert common Supabase authentication errors
+  into friendlier messages.
+*/
+
+function getAuthErrorMessage(error) {
+
+  const message =
+    error?.message || "Something went wrong.";
+
+  if (
+    message.toLowerCase().includes("invalid login")
+  ) {
+    return "The email or password is incorrect.";
+  }
+
+  if (
+    message.toLowerCase().includes("already registered")
+  ) {
+    return "An account with this email already exists.";
+  }
+
+  if (
+    message.toLowerCase().includes("user already registered")
+  ) {
+    return "An account with this email already exists.";
+  }
+
+  if (
+    message.toLowerCase().includes("password should be at least")
+  ) {
+    return "Your password must be at least 6 characters.";
+  }
+
+  return message;
+
+}
+
+
+/*
+  Log out.
+*/
+
+async function logout() {
+
+  const { error } = await db.auth.signOut();
+
+  if (error) {
+
+    console.error(error);
+
+    showAppMessage(
+      "Unable to log out. Please try again.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SHOW / HIDE LOGIN AND APP
+   ========================================================= */
+
+function showLogin() {
+
+  document
+    .getElementById("authSection")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("appSection")
+    .classList.add("hidden");
+
+}
+
+
+async function showApp() {
+
+  document
+    .getElementById("authSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("appSection")
+    .classList.remove("hidden");
+
+
+  if (currentUser) {
+
+    document.getElementById("loggedInUser").textContent =
+      currentUser.email || "";
+
+  }
+
+
+  await loadTransactions();
+
+}
+
+
+/* =========================================================
+   DATABASE
+   ========================================================= */
+
+
+/*
+  Load ONLY the current user's transactions.
+
+  Supabase Row Level Security also protects this data
+  at the database level.
+*/
+
+async function loadTransactions() {
+
+  if (!currentUser) {
+    return;
+  }
+
+
+  document
+    .getElementById("loading")
+    .classList.remove("hidden");
+
+
+  const { data, error } = await db
+    .from("transactions")
+    .select("*")
+    .eq("user_id", currentUser.id)
+    .order("transaction_date", {
+      ascending: false
+    })
+    .order("id", {
+      ascending: false
+    });
+
+
+  document
+    .getElementById("loading")
+    .classList.add("hidden");
+
+
+  if (error) {
+
+    console.error(error);
+
+    showAppMessage(
+      "Could not load your transactions: " +
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  transactions = data || [];
+
+  renderAll();
+
+}
+
+
+/*
+  Add or update a transaction.
+*/
+
+async function saveTransaction() {
+
+  if (!currentUser) {
+
+    showAppMessage(
+      "Please sign in first.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const title =
+    document.getElementById("title").value.trim();
+
+  const amount =
+    parseFloat(
+      document.getElementById("amount").value
+    );
+
+  const type =
+    document.getElementById("type").value;
+
+  const category =
+    document.getElementById("category").value;
+
+  const transactionDate =
+    document.getElementById("transactionDate").value;
+
+
+  if (!title) {
+
+    showAppMessage(
+      "Please enter a title.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (
+    isNaN(amount) ||
+    amount <= 0
+  ) {
+
+    showAppMessage(
+      "Please enter a valid amount.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (!transactionDate) {
+
+    showAppMessage(
+      "Please select a date.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const transactionData = {
+
+    user_id: currentUser.id,
+
+    description: title,
+
+    amount: amount.toFixed(2),
+
+    type: type,
+
+    category: category,
+
+    transaction_date: transactionDate
+
+  };
+
+
+  const saveButton =
+    document.getElementById("saveButton");
+
+  saveButton.disabled = true;
+
+
+  try {
+
+    if (editingId) {
+
+      /*
+        UPDATE
+      */
+
+      const { error } =
+        await db
+          .from("transactions")
+          .update({
+            description: title,
+            amount: amount.toFixed(2),
+            type: type,
+            category: category,
+            transaction_date: transactionDate
+          })
+          .eq("id", editingId)
+          .eq("user_id", currentUser.id);
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      showAppMessage(
+        "Transaction updated successfully.",
+        "success"
+      );
+
+
+    } else {
+
+      /*
+        INSERT
+      */
+
+      const { error } =
+        await db
+          .from("transactions")
+          .insert(transactionData);
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      showAppMessage(
+        "Transaction added successfully.",
+        "success"
+      );
+
+    }
+
+
+    editingId = null;
+
+    resetTransactionForm();
+
+    await loadTransactions();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    showAppMessage(
+      "Could not save transaction: " +
+      error.message,
+      "error"
+    );
+
+  } finally {
+
+    saveButton.disabled = false;
+
+  }
+
+}
+
+
+/*
+  Delete a transaction.
+*/
+
+async function deleteTransaction(id) {
+
+  if (!currentUser) {
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      "Are you sure you want to delete this transaction?"
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  const { error } =
+    await db
+      .from("transactions")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", currentUser.id);
+
+
+  if (error) {
+
+    console.error(error);
+
+    showAppMessage(
+      "Could not delete transaction: " +
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  showAppMessage(
+    "Transaction deleted.",
+    "success"
+  );
+
+
+  await loadTransactions();
+
+}
+
+
+/*
+  Begin editing a transaction.
+*/
+
+function editTransaction(id) {
+
+  const transaction =
+    transactions.find(
+      item => String(item.id) === String(id)
+    );
+
+
+  if (!transaction) {
+    return;
+  }
+
+
+  editingId = transaction.id;
+
+
+  document.getElementById("title").value =
+    transaction.description || "";
+
+  document.getElementById("amount").value =
+    transaction.amount || "";
+
+  document.getElementById("type").value =
+    transaction.type || "Expense";
+
+  document.getElementById("category").value =
+    transaction.category || "Miscellaneous";
+
+  document.getElementById("transactionDate").value =
+    transaction.transaction_date || "";
+
+
+  document.getElementById("formTitle").textContent =
+    "Edit Transaction";
+
+  document.getElementById("saveButton").textContent =
+    "Update Transaction";
+
+  document
+    .getElementById("cancelEditButton")
+    .classList.remove("hidden");
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+/*
+  Cancel editing.
+*/
+
+function cancelEdit() {
+
+  editingId = null;
+
+  resetTransactionForm();
+
+}
+
+
+/*
+  Reset the transaction form.
+*/
+
+function resetTransactionForm() {
+
+  document.getElementById("title").value = "";
+
+  document.getElementById("amount").value = "";
+
+  document.getElementById("type").value =
+    "Income";
+
+  document.getElementById("category").value =
+    "Salary";
+
+  document.getElementById("transactionDate").value =
+    getToday();
+
+  document.getElementById("formTitle").textContent =
+    "Add Transaction";
+
+  document.getElementById("saveButton").textContent =
+    "Add Transaction";
+
+  document
+    .getElementById("cancelEditButton")
+    .classList.add("hidden");
+
+}
+
+
+/* =========================================================
+   DISPLAY / CALCULATIONS
+   ========================================================= */
+
+function renderAll() {
+
+  renderSummary();
+
+  renderTransactions();
+
+}
+
+
+/*
+  Get transactions after applying month filter.
+*/
+
+function getFilteredTransactions() {
+
+  const month =
+    document.getElementById("monthFilter").value;
+
+
+  if (!month) {
+    return transactions;
+  }
+
+
+  return transactions.filter(function(transaction) {
+
+    return transaction.transaction_date
+      .startsWith(month);
+
+  });
+
+}
+
+
+/*
+  Calculate income, expenses and balance.
+*/
+
+function renderSummary() {
+
+  const filtered =
+    getFilteredTransactions();
+
+
+  let income = 0;
+
+  let expenses = 0;
+
+
+  filtered.forEach(function(transaction) {
+
+    const amount =
+      parseFloat(transaction.amount) || 0;
+
+
+    if (transaction.type === "Income") {
+
+      income += amount;
+
+    } else {
+
+      expenses += amount;
+
+    }
+
+  });
+
+
+  const balance =
+    income - expenses;
+
+
+  document.getElementById("totalIncome").textContent =
+    formatGBP(income);
+
+  document.getElementById("totalExpenses").textContent =
+    formatGBP(expenses);
+
+  document.getElementById("balance").textContent =
+    formatGBP(balance);
+
+}
+
+
+/*
+  Display transaction table.
+*/
+
+function renderTransactions() {
+
+  const table =
+    document.getElementById("transactionTable");
+
+
+  table.innerHTML = "";
+
+
+  const filtered =
+    getFilteredTransactions();
+
+
+  if (filtered.length === 0) {
+
+    const row =
+      document.createElement("tr");
+
+    row.innerHTML = `
+      <td colspan="6" class="empty">
+        No transactions found.
+      </td>
+    `;
+
+    table.appendChild(row);
+
+    return;
+  }
+
+
+  filtered.forEach(function(transaction) {
+
+    const row =
+      document.createElement("tr");
+
+
+    const amount =
+      parseFloat(transaction.amount) || 0;
+
+
+    const amountClass =
+      transaction.type === "Income"
+        ? "amount-income"
+        : "amount-expense";
+
+
+    const sign =
+      transaction.type === "Income"
+        ? "+"
+        : "-";
+
+
+    row.innerHTML = `
+
+      <td>
+        ${escapeHTML(
+          formatDate(transaction.transaction_date)
+        )}
+      </td>
+
+      <td>
+        ${escapeHTML(
+          transaction.description
+        )}
+      </td>
+
+      <td>
+        ${escapeHTML(
+          transaction.type
+        )}
+      </td>
+
+      <td>
+        ${escapeHTML(
+          transaction.category
+        )}
+      </td>
+
+      <td class="${amountClass}">
+        ${sign}${formatGBP(amount)}
+      </td>
+
+      <td>
+
+        <button
+          class="small warning"
+          onclick="editTransaction(${transaction.id})"
+        >
+          Edit
+        </button>
+
+        <button
+          class="small danger"
+          onclick="deleteTransaction(${transaction.id})"
+        >
+          Delete
+        </button>
+
+      </td>
+
+    `;
+
+
+    table.appendChild(row);
+
+  });
+
+}
+
+
+/* =========================================================
+   MONTH FILTER
+   ========================================================= */
+
+function clearMonthFilter() {
+
+  document.getElementById("monthFilter").value = "";
+
+  renderAll();
+
+}
+
+
+/* =========================================================
+   EXCEL EXPORT
+   ========================================================= */
+
+function exportExcel() {
+
+  const filtered =
+    getFilteredTransactions();
+
+
+  if (filtered.length === 0) {
+
+    showAppMessage(
+      "There are no transactions to export.",
+      "info"
+    );
+
+    return;
+  }
+
+
+  const rows =
+    filtered.map(function(transaction) {
+
+      return {
+
+        Date:
+          transaction.transaction_date,
+
+        Title:
+          transaction.description,
+
+        Type:
+          transaction.type,
+
+        Category:
+          transaction.category,
+
+        Amount:
+          parseFloat(transaction.amount)
+
+      };
+
+    });
+
+
+  const worksheet =
+    XLSX.utils.json_to_sheet(rows);
+
+
+  const workbook =
+    XLSX.utils.book_new();
+
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    "Transactions"
+  );
+
+
+  const month =
+    document.getElementById("monthFilter").value;
+
+
+  const filename =
+    month
+      ? `budget-${month}.xlsx`
+      : "budget.xlsx";
+
+
+  XLSX.writeFile(
+    workbook,
+    filename
+  );
+
+
+  showAppMessage(
+    "Excel file exported successfully.",
+    "success"
+  );
+
+}
+
+
+/* =========================================================
+   JSON BACKUP
+   ========================================================= */
+
+function backupJSON() {
+
+  if (transactions.length === 0) {
+
+    showAppMessage(
+      "There are no transactions to back up.",
+      "info"
+    );
+
+    return;
+  }
+
+
+  const backup = {
+
+    exportedAt:
+      new Date().toISOString(),
+
+    user:
+      currentUser?.email || "",
+
+    transactions:
+      transactions
+
+  };
+
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          backup,
+          null,
+          2
+        )
+      ],
+      {
+        type: "application/json"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const link =
+    document.createElement("a");
+
+
+  link.href = url;
+
+  link.download =
+    "budget-backup.json";
+
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
+
+  URL.revokeObjectURL(url);
+
+
+  showAppMessage(
+    "JSON backup created successfully.",
+    "success"
+  );
+
+}
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function getToday() {
+
+  const today =
+    new Date();
+
+
+  const year =
+    today.getFullYear();
+
+
+  const month =
+    String(
+      today.getMonth() + 1
+    ).padStart(2, "0");
+
+
+  const day =
+    String(
+      today.getDate()
+    ).padStart(2, "0");
+
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
+function formatGBP(amount) {
+
+  return new Intl.NumberFormat(
+    "en-GB",
+    {
+      style: "currency",
+      currency: "GBP"
+    }
+  ).format(amount);
+
+}
+
+
+function formatDate(dateString) {
+
+  if (!dateString) {
+    return "";
+  }
+
+
+  const parts =
+    dateString.split("-");
+
+
+  if (parts.length !== 3) {
+    return dateString;
+  }
+
+
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+}
+
+
+/*
+  Prevent transaction titles containing HTML
+  from being interpreted as webpage code.
+*/
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+function showAuthMessage(
+  message,
+  type
+) {
+
+  const element =
+    document.getElementById("authMessage");
+
+
+  element.textContent =
+    message;
+
+
+  element.className =
+    "message " + type;
+
+}
+
+
+function clearAuthMessage() {
+
+  const element =
+    document.getElementById("authMessage");
+
+
+  element.textContent = "";
+
+  element.className =
+    "message";
+
+}
+
+
+function showAppMessage(
+  message,
+  type
+) {
+
+  const element =
+    document.getElementById("appMessage");
+
+
+  element.textContent =
+    message;
+
+
+  element.className =
+    "message " + type;
+
+
+  /*
+    Automatically remove the message
+    after a few seconds.
+  */
+
+  setTimeout(function() {
+
+    element.textContent = "";
+
+    element.className =
+      "message";
+
+  }, 4000);
+
+}
+
+</script>
+
+</body>
+</html>
 ```
