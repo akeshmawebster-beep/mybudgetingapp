@@ -647,7 +647,6 @@
    NEVER put your Supabase service-role/secret key here.
    ========================================================= */
 
-const SUPABASE_URL = "sb_secret_IbpHIbuWK3Vcu1AKQJRXVQ_z8Mjtyuk";
 
 const SUPABASE_KEY = "sb_publishable_o0AQq3DS5Cm1g3KjD2vqpw_jQLyQeF6";
 
