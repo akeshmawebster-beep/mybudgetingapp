@@ -1,140 +1,1683 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Luma — Money, made clear.</title>
-<style>
-:root{
-  --bg:#f5f7f3;--panel:#fff;--ink:#17211b;--muted:#748078;--line:#e6ebe6;
-  --green:#173f2c;--mint:#cfe9d6;--lime:#dff1a8;--orange:#f4c58b;--red:#e7a4a4;
-  --shadow:0 12px 35px rgba(20,45,31,.07);--radius:22px;
-}
-*{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
-button,input{font:inherit} button{cursor:pointer;border:0}
-.app{display:flex;min-height:100vh}.sidebar{width:245px;background:#102d20;color:#dce9df;padding:25px 16px;position:fixed;inset:0 auto 0 0}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px;padding:4px 10px 30px}.logo-dot{width:30px;height:30px;border-radius:10px;background:var(--lime);display:grid;place-items:center;color:var(--green);font-weight:900}
-.nav{display:grid;gap:6px}.nav button{background:transparent;color:#b7cabe;text-align:left;padding:12px 14px;border-radius:12px;display:flex;gap:12px;align-items:center}.nav button.active,.nav button:hover{background:#234a37;color:white}
-.bottom{position:absolute;bottom:22px;left:16px;right:16px;background:#183b2a;border-radius:16px;padding:15px;color:#d9e8dd;font-size:12px}.bottom b{display:block;font-size:13px;margin-bottom:5px}
-main{margin-left:245px;width:calc(100% - 245px);padding:32px 38px 50px;max-width:1450px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.eyebrow{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.09em}.top h1{margin:5px 0 0;font-size:30px;letter-spacing:-.03em}.user{display:flex;align-items:center;gap:10px}.avatar{width:40px;height:40px;border-radius:50%;background:#c9dfcf;display:grid;place-items:center;font-weight:800}
-.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:20px}.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}.hero{background:var(--green);color:white;border:0;min-height:230px;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:#2e6248;right:-60px;top:-65px;opacity:.5}.hero .label{color:#bcd2c3}.safe{font-size:48px;font-weight:800;letter-spacing:-.04em;margin:10px 0 4px}.safe-sub{color:#bfd1c4}.hero-actions{display:flex;gap:10px;margin-top:24px}.btn{padding:11px 15px;border-radius:12px;font-weight:750}.btn-light{background:white;color:var(--green)}.btn-ghost{background:#2a503c;color:white}
-.card-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.card-title h2{font-size:17px;margin:0}.link{color:#54705d;font-size:13px;font-weight:700;background:none}
-.bars{display:flex;align-items:end;height:135px;gap:12px;padding-top:10px}.bar-wrap{flex:1;text-align:center;font-size:11px;color:var(--muted)}.bar{height:80px;background:#d6e7db;border-radius:8px 8px 4px 4px;margin:0 auto 7px;width:100%;max-width:34px}.bar.highlight{background:#6fa07e}.bar.tall{height:112px}.bar.med{height:95px}.bar.low{height:65px}
-.split{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}.budget-row{margin:15px 0}.budget-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px}.track{height:8px;background:#edf1ed;border-radius:99px;overflow:hidden}.fill{height:100%;border-radius:99px;background:#6c9c79}.fill.orange{background:#d99c4d}.fill.red{background:#cc7777}.pill{font-size:11px;padding:4px 8px;background:#edf4ee;border-radius:20px;color:#55715d}
-.txn{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.txn:last-child{border:0}.merchant-icon{width:38px;height:38px;border-radius:12px;background:#eef3ee;display:grid;place-items:center;font-weight:800;color:#42624d}.txn-main{flex:1}.txn-main b{font-size:13px;display:block}.txn-main span{font-size:11px;color:var(--muted)}.amount{font-weight:800;font-size:13px}.negative{color:#26352d}.positive{color:#4e8a5d}
-.goal{display:flex;gap:15px;align-items:center}.ring{width:72px;height:72px;border-radius:50%;background:conic-gradient(#6b9b78 0 68%,#e9eee9 68%);display:grid;place-items:center;position:relative}.ring:after{content:"";width:56px;height:56px;background:white;border-radius:50%;position:absolute}.ring span{position:relative;z-index:1;font-size:13px;font-weight:800}.goal b{display:block;margin-bottom:4px}.goal small{color:var(--muted)}
-.insight{background:#f1f6ee;border:1px solid #dfebdd;border-radius:15px;padding:14px;margin-top:12px;font-size:13px;line-height:1.45}.insight strong{display:block;margin-bottom:4px}.fab{position:fixed;right:28px;bottom:28px;width:56px;height:56px;border-radius:50%;background:#173f2c;color:white;font-size:26px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
-.modal{display:none;position:fixed;inset:0;background:rgba(13,28,20,.45);align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modal-box{background:white;border-radius:22px;padding:25px;width:min(420px,100%);box-shadow:var(--shadow)}.modal-box h2{margin-top:0}.field{margin:13px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}.field input,.field select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fafcf9}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);opacity:0;background:#173f2c;color:white;padding:12px 18px;border-radius:12px;font-size:13px;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:950px){.sidebar{width:75px;padding:22px 10px}.logo span,.nav button span,.bottom{display:none}.nav button{justify-content:center}.app main{margin-left:75px;width:calc(100% - 75px);padding:24px}.grid,.split{grid-template-columns:1fr}}
-@media(max-width:650px){main{padding:18px!important}.top h1{font-size:24px}.hero{min-height:215px}.safe{font-size:40px}.grid,.split{grid-template-columns:1fr}.card{padding:18px}.top{margin-bottom:18px}.sidebar{display:none}.app main{margin-left:0;width:100%}}
-</style>
-</head>
-<body>
-<div class="app">
-<aside class="sidebar">
-  <div class="logo"><div class="logo-dot">L</div><span>Luma</span></div>
-  <nav class="nav">
-    <button class="active" onclick="nav(this,'Dashboard')">◉ <span>Dashboard</span></button>
-    <button onclick="nav(this,'Transactions')">↕ <span>Transactions</span></button>
-    <button onclick="nav(this,'Budget')">▤ <span>Budget</span></button>
-    <button onclick="nav(this,'Goals')">◎ <span>Goals</span></button>
-    <button onclick="nav(this,'Insights')">✦ <span>Insights</span></button>
-  </nav>
-  <div class="bottom"><b>September is looking good</b>You're £184 ahead of your planned spending.</div>
-</aside>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PennyPilot — Personal Budgeting</title>
 
-<main>
-  <div class="top">
-    <div><div class="eyebrow">Monday, 28 September</div><h1>Good evening, Alex.</h1></div>
-    <div class="user"><span style="font-size:13px;color:var(--muted)">Personal</span><div class="avatar">A</div></div>
+  <style>
+    :root {
+      --green: #123d2a;
+      --green-2: #1f6545;
+      --light-green: #e8f3ec;
+      --lime: #dff2a8;
+      --bg: #f5f7f4;
+      --card: #ffffff;
+      --text: #17231c;
+      --muted: #77827b;
+      --border: #e3e9e4;
+      --danger: #c95f5f;
+      --warning: #d39a3d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      width: 240px;
+      background: var(--green);
+      color: white;
+      padding: 24px 16px;
+      position: fixed;
+      inset: 0 auto 0 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      padding: 5px 10px 35px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--lime);
+      color: var(--green);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav button {
+      border: 0;
+      background: transparent;
+      color: #bfd0c6;
+      text-align: left;
+      padding: 13px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: #215039;
+      color: white;
+    }
+
+    /* MAIN */
+
+    main {
+      margin-left: 240px;
+      width: calc(100% - 240px);
+      padding: 32px;
+      max-width: 1500px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 5px 0 0;
+      font-size: 30px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #cce0d2;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    /* CARDS */
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(25, 50, 35, .05);
+    }
+
+    .safe-card {
+      background: var(--green);
+      color: white;
+      min-height: 230px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .safe-card::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      background: #20543a;
+      border-radius: 50%;
+      right: -90px;
+      top: -80px;
+    }
+
+    .safe-card .eyebrow {
+      color: #bad0c1;
+    }
+
+    .safe-number {
+      font-size: 48px;
+      font-weight: 800;
+      margin: 10px 0 5px;
+    }
+
+    .safe-sub {
+      color: #bed1c5;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      border: 0;
+      padding: 11px 16px;
+      border-radius: 11px;
+      font-weight: 750;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+    }
+
+    .btn-light {
+      background: white;
+      color: var(--green);
+    }
+
+    .btn-secondary {
+      background: #28533e;
+      color: white;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    /* CATEGORY BUDGETS */
+
+    .category {
+      margin-bottom: 18px;
+    }
+
+    .category-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .progress {
+      height: 8px;
+      background: #edf1ed;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--green-2);
+      border-radius: 50px;
+      transition: width .3s;
+    }
+
+    .progress-bar.warning {
+      background: var(--warning);
+    }
+
+    .progress-bar.danger {
+      background: var(--danger);
+    }
+
+    /* TRANSACTIONS */
+
+    .transaction {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .transaction:last-child {
+      border-bottom: 0;
+    }
+
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--light-green);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+    }
+
+    .transaction-info {
+      flex: 1;
+    }
+
+    .transaction-info strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .transaction-info span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .amount {
+      font-weight: 800;
+    }
+
+    .expense {
+      color: #29352e;
+    }
+
+    .income {
+      color: #4c8a60;
+    }
+
+    /* MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 25, 17, .55);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      width: 100%;
+      max-width: 480px;
+      background: white;
+      border-radius: 24px;
+      padding: 28px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+
+    .modal-description {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: #fbfcfb;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--green-2);
+    }
+
+    /* CATEGORY PICKER */
+
+    .category-picker {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .category-option {
+      border: 1px solid var(--border);
+      background: #fafcf9;
+      padding: 12px 5px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 11px;
+      transition: .15s;
+    }
+
+    .category-option:hover {
+      border-color: var(--green-2);
+    }
+
+    .category-option.selected {
+      background: var(--light-green);
+      border: 2px solid var(--green-2);
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .category-emoji {
+      font-size: 21px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .custom-category {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .custom-category input {
+      flex: 1;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    /* TOAST */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 25px;
+      transform: translate(-50%, 30px);
+      background: var(--green);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 12px;
+      opacity: 0;
+      transition: .2s;
+      z-index: 200;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* MOBILE */
+
+    @media(max-width: 900px) {
+      .sidebar {
+        width: 70px;
+      }
+
+      .sidebar .logo span,
+      .nav span {
+        display: none;
+      }
+
+      .nav button {
+        justify-content: center;
+      }
+
+      main {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+      }
+
+      .dashboard-grid,
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width: 600px) {
+      .sidebar {
+        display: none;
+      }
+
+      main {
+        margin-left: 0;
+        width: 100%;
+        padding: 18px;
+      }
+
+      .topbar h1 {
+        font-size: 23px;
+      }
+
+      .safe-number {
+        font-size: 40px;
+      }
+
+      .category-picker {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">P</div>
+      <span>PennyPilot</span>
+    </div>
+
+    <nav class="nav">
+
+      <button class="active">
+        ◉
+        <span>Dashboard</span>
+      </button>
+
+      <button>
+        ↕
+        <span>Transactions</span>
+      </button>
+
+      <button>
+        ▤
+        <span>Budgets</span>
+      </button>
+
+      <button>
+        ◎
+        <span>Savings Goals</span>
+      </button>
+
+      <button>
+        ✦
+        <span>Insights</span>
+      </button>
+
+    </nav>
+
+  </aside>
+
+  <!-- MAIN -->
+
+  <main>
+
+    <div class="topbar">
+
+      <div>
+        <div class="eyebrow">
+          Monday, 28 September
+        </div>
+
+        <h1>
+          Good evening, Alex.
+        </h1>
+      </div>
+
+      <div class="profile">
+        <span>Personal</span>
+        <div class="avatar">A</div>
+      </div>
+
+    </div>
+
+
+    <!-- TOP DASHBOARD -->
+
+    <section class="dashboard-grid">
+
+      <div class="card safe-card">
+
+        <div class="eyebrow">
+          Safe to spend
+        </div>
+
+        <div
+          class="safe-number"
+          id="safeToSpend"
+        >
+          £1,284.60
+        </div>
+
+        <div class="safe-sub">
+          Available after bills, budgets and savings
+        </div>
+
+        <div class="actions">
+
+          <button
+            class="btn btn-light"
+            onclick="openTransactionModal()"
+          >
+            + Add transaction
+          </button>
+
+          <button
+            class="btn btn-secondary"
+            onclick="showToast('Spending review opened')"
+          >
+            Review spending
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-header">
+          <h2>September overview</h2>
+        </div>
+
+        <div class="category">
+
+          <div class="category-top">
+            <span>Total spending</span>
+            <strong id="totalSpent">
+              £1,946
+            </strong>
+          </div>
+
+          <div class="progress">
+            <div
+              class="progress-bar"
+              style="width:63%"
+            ></div>
+          </div>
+
+        </div>
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          margin-top:25px;
+        ">
+
+          <div>
+            <div class="eyebrow">Income</div>
+            <strong style="font-size:20px">
+              £4,280
+            </strong>
+          </div>
+
+          <div>
+            <div class="eyebrow">Saved</div>
+            <strong style="font-size:20px">
+              £856
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CATEGORY BUDGETS -->
+
+    <section class="section-grid">
+
+      <div class="card">
+
+        <div class="card-header">
+
+          <h2>
+            Category budgets
+          </h2>
+
+          <button
+            class="btn btn-primary"
+            onclick="openTransactionModal()"
+          >
+            + Add
+          </button>
+
+        </div>
+
+        <div id="categoryBudgets"></div>
+
+      </div>
+
+
+      <!-- RECENT TRANSACTIONS -->
+
+      <div class="card">
+
+        <div class="card-header">
+
+          <h2>
+            Recent transactions
+          </h2>
+
+        </div>
+
+        <div id="transactions"></div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- TRANSACTION MODAL -->
+
+<div
+  class="modal"
+  id="transactionModal"
+>
+
+  <div class="modal-content">
+
+    <h2>
+      Add transaction
+    </h2>
+
+    <div class="modal-description">
+      Tell PennyPilot where your money went.
+    </div>
+
+
+    <!-- TYPE -->
+
+    <div class="field">
+
+      <label>
+        Transaction type
+      </label>
+
+      <select id="transactionType">
+
+        <option value="expense">
+          Expense
+        </option>
+
+        <option value="income">
+          Income
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- AMOUNT -->
+
+    <div class="field">
+
+      <label>
+        Amount
+      </label>
+
+      <input
+        id="amount"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="0.00"
+      />
+
+    </div>
+
+
+    <!-- MERCHANT -->
+
+    <div class="field">
+
+      <label>
+        Merchant / description
+      </label>
+
+      <input
+        id="merchant"
+        type="text"
+        placeholder="e.g. Tesco"
+      />
+
+    </div>
+
+
+    <!-- CATEGORY -->
+
+    <div class="field">
+
+      <label>
+        Category
+      </label>
+
+      <div
+        class="category-picker"
+        id="categoryPicker"
+      ></div>
+
+      <div class="custom-category">
+
+        <input
+          id="customCategory"
+          placeholder="Create your own category..."
+        />
+
+        <button
+          class="btn btn-primary"
+          onclick="createCategory()"
+        >
+          Add
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- DATE -->
+
+    <div class="field">
+
+      <label>
+        Date
+      </label>
+
+      <input
+        id="transactionDate"
+        type="date"
+      />
+
+    </div>
+
+
+    <!-- NOTES -->
+
+    <div class="field">
+
+      <label>
+        Note
+      </label>
+
+      <input
+        id="note"
+        placeholder="Optional note"
+      />
+
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="btn"
+        onclick="closeTransactionModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn btn-primary"
+        onclick="saveTransaction()"
+      >
+        Add transaction
+      </button>
+
+    </div>
+
   </div>
 
-  <section class="grid">
-    <div class="card hero">
-      <div class="eyebrow label">Safe to spend this month</div>
-      <div class="safe" id="safe">£1,284.60</div>
-      <div class="safe-sub">after bills, budgets & savings</div>
-      <div class="hero-actions"><button class="btn btn-light" onclick="openModal()">+ Add transaction</button><button class="btn btn-ghost" onclick="toast('Weekly review opened')">Review spending →</button></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><h2>September overview</h2><span class="pill">On track</span></div>
-      <div style="display:flex;justify-content:space-between;margin:23px 0 5px"><span style="color:var(--muted);font-size:12px">Spent</span><b>£1,946</b></div>
-      <div class="track"><div class="fill" style="width:63%"></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:20px"><div><div class="eyebrow">Income</div><b style="font-size:19px">£4,280</b></div><div><div class="eyebrow">Saved</div><b style="font-size:19px">£856</b></div></div>
-    </div>
-  </section>
-
-  <section class="split">
-    <div class="card">
-      <div class="card-title"><h2>Spending this month</h2><button class="link">View report</button></div>
-      <div class="bars">
-        <div class="bar-wrap"><div class="bar low"></div>W1</div><div class="bar-wrap"><div class="bar med"></div>W2</div>
-        <div class="bar-wrap"><div class="bar tall"></div>W3</div><div class="bar-wrap"><div class="bar highlight"></div>W4</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title"><h2>Savings goal</h2><button class="link">Details</button></div>
-      <div class="goal"><div class="ring"><span>68%</span></div><div><b>Emergency fund</b><small>£3,400 of £5,000</small><div style="margin-top:8px;color:#5c7e65;font-size:12px">£200/month planned</div></div></div>
-    </div>
-  </section>
-
-  <section class="split">
-    <div class="card">
-      <div class="card-title"><h2>Budget health</h2><button class="link" onclick="nav(null,'Budget')">Edit budget</button></div>
-      <div class="budget-row"><div class="budget-top"><span>Needs</span><b>£1,190 / £1,650</b></div><div class="track"><div class="fill" style="width:72%"></div></div></div>
-      <div class="budget-row"><div class="budget-top"><span>Wants</span><b>£516 / £850</b></div><div class="track"><div class="fill orange" style="width:61%"></div></div></div>
-      <div class="budget-row"><div class="budget-top"><span>Savings</span><b>£856 / £856</b></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
-    </div>
-    <div class="card">
-      <div class="card-title"><h2>Money insight</h2><span class="pill">Based on your data</span></div>
-      <div class="insight"><strong>Dining out is up 18% this month.</strong>You've spent £214 so far. Your usual monthly average is £181.</div>
-      <div class="insight"><strong>Nice work on savings.</strong>You're on pace to reach your emergency fund goal 2 months early.</div>
-    </div>
-  </section>
-
-  <section class="card" style="margin-top:20px">
-    <div class="card-title"><h2>Recent transactions</h2><button class="link" onclick="nav(null,'Transactions')">See all</button></div>
-    <div id="transactions">
-      <div class="txn"><div class="merchant-icon">T</div><div class="txn-main"><b>Tesco</b><span>Groceries · Today</span></div><div class="amount negative">−£42.80</div></div>
-      <div class="txn"><div class="merchant-icon">N</div><div class="txn-main"><b>Netflix</b><span>Entertainment · Yesterday</span></div><div class="amount negative">−£10.99</div></div>
-      <div class="txn"><div class="merchant-icon">S</div><div class="txn-main"><b>Salary</b><span>Income · 25 Sep</span></div><div class="amount positive">+£2,140.00</div></div>
-      <div class="txn"><div class="merchant-icon">O</div><div class="txn-main"><b>Octopus Energy</b><span>Utilities · 24 Sep</span></div><div class="amount negative">−£96.00</div></div>
-    </div>
-  </section>
-</main>
 </div>
 
-<button class="fab" onclick="openModal()">+</button>
 
-<div class="modal" id="modal">
- <div class="modal-box">
-  <h2>Add transaction</h2>
-  <div class="field"><label>Merchant</label><input id="merchant" placeholder="e.g. Tesco"></div>
-  <div class="field"><label>Amount (£)</label><input id="amount" type="number" step="0.01" placeholder="0.00"></div>
-  <div class="field"><label>Type</label><select id="type"><option value="expense">Expense</option><option value="income">Income</option></select></div>
-  <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn" style="background:var(--green);color:white" onclick="addTransaction()">Add transaction</button></div>
- </div>
-</div>
-<div class="toast" id="toast"></div>
+<div
+  class="toast"
+  id="toast"
+></div>
+
 
 <script>
-function openModal(){document.getElementById('modal').classList.add('open');document.getElementById('merchant').focus()}
-function closeModal(){document.getElementById('modal').classList.remove('open')}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-function addTransaction(){
- const merchant=document.getElementById('merchant').value.trim()||'New transaction';
- const amount=parseFloat(document.getElementById('amount').value)||0;
- const type=document.getElementById('type').value;
- const row=document.createElement('div');row.className='txn';
- row.innerHTML=`<div class="merchant-icon">${merchant[0].toUpperCase()}</div><div class="txn-main"><b>${merchant}</b><span>${type==='income'?'Income':'Uncategorised'} · Just now</span></div><div class="amount ${type==='income'?'positive':'negative'}">${type==='income'?'+':'−'}£${amount.toFixed(2)}</div>`;
- document.getElementById('transactions').prepend(row);closeModal();toast('Transaction added');document.getElementById('merchant').value='';document.getElementById('amount').value='';
+
+/*
+  PENNYPILOT DATA
+*/
+
+let categories = [
+
+  {
+    id: "groceries",
+    name: "Groceries",
+    emoji: "🛒",
+    budget: 400,
+    spent: 0
+  },
+
+  {
+    id: "restaurants",
+    name: "Eating Out",
+    emoji: "🍔",
+    budget: 250,
+    spent: 0
+  },
+
+  {
+    id: "transport",
+    name: "Transport",
+    emoji: "🚆",
+    budget: 220,
+    spent: 0
+  },
+
+  {
+    id: "housing",
+    name: "Housing",
+    emoji: "🏠",
+    budget: 1200,
+    spent: 0
+  },
+
+  {
+    id: "shopping",
+    name: "Shopping",
+    emoji: "🛍️",
+    budget: 300,
+    spent: 0
+  },
+
+  {
+    id: "entertainment",
+    name: "Entertainment",
+    emoji: "🎬",
+    budget: 150,
+    spent: 0
+  },
+
+  {
+    id: "health",
+    name: "Health",
+    emoji: "❤️",
+    budget: 150,
+    spent: 0
+  },
+
+  {
+    id: "subscriptions",
+    name: "Subscriptions",
+    emoji: "📱",
+    budget: 100,
+    spent: 0
+  }
+
+];
+
+
+let transactions = [
+
+  {
+    merchant: "Tesco",
+    amount: 42.80,
+    type: "expense",
+    category: "Groceries",
+    emoji: "🛒",
+    date: "Today"
+  },
+
+  {
+    merchant: "Netflix",
+    amount: 10.99,
+    type: "expense",
+    category: "Subscriptions",
+    emoji: "📱",
+    date: "Yesterday"
+  },
+
+  {
+    merchant: "Salary",
+    amount: 2140,
+    type: "income",
+    category: "Income",
+    emoji: "💰",
+    date: "25 Sep"
+  },
+
+  {
+    merchant: "Octopus Energy",
+    amount: 96,
+    type: "expense",
+    category: "Housing",
+    emoji: "🏠",
+    date: "24 Sep"
+  }
+
+];
+
+
+let selectedCategory = null;
+
+
+/*
+  OPEN MODAL
+*/
+
+function openTransactionModal() {
+
+  document
+    .getElementById("transactionModal")
+    .classList.add("open");
+
+  renderCategoryPicker();
+
+  document
+    .getElementById("transactionDate")
+    .valueAsDate = new Date();
+
 }
-function nav(btn,name){
- document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');
- if(name!=='Dashboard') toast(name+' view is ready for the next build');
+
+
+/*
+  CLOSE MODAL
+*/
+
+function closeTransactionModal() {
+
+  document
+    .getElementById("transactionModal")
+    .classList.remove("open");
+
 }
-document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+
+
+/*
+  CATEGORY PICKER
+*/
+
+function renderCategoryPicker() {
+
+  const picker =
+    document.getElementById("categoryPicker");
+
+  picker.innerHTML = "";
+
+  categories.forEach(category => {
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "category-option";
+
+    if (
+      selectedCategory === category.name
+    ) {
+
+      button.classList.add("selected");
+
+    }
+
+    button.innerHTML = `
+      <span class="category-emoji">
+        ${category.emoji}
+      </span>
+
+      ${category.name}
+    `;
+
+    button.onclick = () => {
+
+      selectedCategory =
+        category.name;
+
+      renderCategoryPicker();
+
+    };
+
+    picker.appendChild(button);
+
+  });
+
+}
+
+
+/*
+  CREATE CUSTOM CATEGORY
+*/
+
+function createCategory() {
+
+  const input =
+    document.getElementById("customCategory");
+
+  const name =
+    input.value.trim();
+
+  if (!name) {
+
+    showToast(
+      "Enter a category name first"
+    );
+
+    return;
+
+  }
+
+
+  const exists =
+    categories.some(
+      category =>
+        category.name.toLowerCase() ===
+        name.toLowerCase()
+    );
+
+
+  if (exists) {
+
+    showToast(
+      "That category already exists"
+    );
+
+    return;
+
+  }
+
+
+  const newCategory = {
+
+    id:
+      name
+        .toLowerCase()
+        .replace(/\s+/g, "-"),
+
+    name: name,
+
+    emoji: "📁",
+
+    budget: 200,
+
+    spent: 0
+
+  };
+
+
+  categories.push(newCategory);
+
+  selectedCategory = name;
+
+  input.value = "";
+
+  renderCategoryPicker();
+
+  renderBudgets();
+
+  showToast(
+    "Category created"
+  );
+
+}
+
+
+/*
+  SAVE TRANSACTION
+*/
+
+function saveTransaction() {
+
+  const type =
+    document.getElementById(
+      "transactionType"
+    ).value;
+
+
+  const amount =
+    parseFloat(
+      document.getElementById(
+        "amount"
+      ).value
+    );
+
+
+  const merchant =
+    document.getElementById(
+      "merchant"
+    ).value.trim();
+
+
+  const date =
+    document.getElementById(
+      "transactionDate"
+    ).value;
+
+
+  const note =
+    document.getElementById(
+      "note"
+    ).value.trim();
+
+
+  if (!amount || amount <= 0) {
+
+    showToast(
+      "Enter a valid amount"
+    );
+
+    return;
+
+  }
+
+
+  if (!merchant) {
+
+    showToast(
+      "Enter a merchant or description"
+    );
+
+    return;
+
+  }
+
+
+  if (
+    type === "expense" &&
+    !selectedCategory
+  ) {
+
+    showToast(
+      "Choose a category"
+    );
+
+    return;
+
+  }
+
+
+  let categoryName =
+    type === "income"
+      ? "Income"
+      : selectedCategory;
+
+
+  let category =
+    categories.find(
+      item =>
+        item.name === categoryName
+    );
+
+
+  if (
+    type === "expense" &&
+    category
+  ) {
+
+    category.spent += amount;
+
+  }
+
+
+  const categoryEmoji =
+    category?.emoji ||
+    "💰";
+
+
+  transactions.unshift({
+
+    merchant,
+
+    amount,
+
+    type,
+
+    category: categoryName,
+
+    emoji: categoryEmoji,
+
+    date:
+      date
+        ? formatDate(date)
+        : "Today",
+
+    note
+
+  });
+
+
+  renderTransactions();
+
+  renderBudgets();
+
+  updateDashboard();
+
+
+  closeTransactionModal();
+
+  clearForm();
+
+
+  showToast(
+    "Transaction added"
+  );
+
+}
+
+
+/*
+  FORMAT DATE
+*/
+
+function formatDate(date) {
+
+  const d =
+    new Date(date);
+
+  return d.toLocaleDateString(
+    "en-GB",
+    {
+      day: "numeric",
+      month: "short"
+    }
+  );
+
+}
+
+
+/*
+  TRANSACTIONS
+*/
+
+function renderTransactions() {
+
+  const container =
+    document.getElementById(
+      "transactions"
+    );
+
+  container.innerHTML = "";
+
+
+  transactions
+    .slice(0, 8)
+    .forEach(transaction => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "transaction";
+
+
+      row.innerHTML = `
+
+        <div class="transaction-icon">
+          ${transaction.emoji}
+        </div>
+
+        <div class="transaction-info">
+
+          <strong>
+            ${escapeHtml(
+              transaction.merchant
+            )}
+          </strong>
+
+          <span>
+            ${escapeHtml(
+              transaction.category
+            )}
+            ·
+            ${transaction.date}
+          </span>
+
+        </div>
+
+        <div class="
+          amount
+          ${transaction.type === "income"
+            ? "income"
+            : "expense"}
+        ">
+
+          ${
+            transaction.type === "income"
+              ? "+"
+              : "−"
+          }
+
+          £${transaction.amount.toFixed(2)}
+
+        </div>
+
+      `;
+
+
+      container.appendChild(row);
+
+    });
+
+}
+
+
+/*
+  CATEGORY BUDGETS
+*/
+
+function renderBudgets() {
+
+  const container =
+    document.getElementById(
+      "categoryBudgets"
+    );
+
+  container.innerHTML = "";
+
+
+  categories
+    .filter(category => category.budget > 0)
+    .forEach(category => {
+
+      const percentage =
+        Math.min(
+          category.spent /
+          category.budget *
+          100,
+          100
+        );
+
+
+      let status = "";
+
+      if (percentage >= 100) {
+
+        status = "danger";
+
+      }
+
+      else if (percentage >= 80) {
+
+        status = "warning";
+
+      }
+
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "category";
+
+
+      row.innerHTML = `
+
+        <div class="category-top">
+
+          <span>
+            ${category.emoji}
+            ${escapeHtml(
+              category.name
+            )}
+          </span>
+
+          <strong>
+            £${category.spent.toFixed(2)}
+            /
+            £${category.budget.toFixed(2)}
+          </strong>
+
+        </div>
+
+        <div class="progress">
+
+          <div
+            class="
+              progress-bar
+              ${status}
+            "
+            style="
+              width:${percentage}%
+            "
+          ></div>
+
+        </div>
+
+      `;
+
+
+      container.appendChild(row);
+
+    });
+
+}
+
+
+/*
+  DASHBOARD CALCULATIONS
+*/
+
+function updateDashboard() {
+
+  const totalSpent =
+    transactions
+      .filter(
+        t => t.type === "expense"
+      )
+      .reduce(
+        (sum, t) =>
+          sum + t.amount,
+        0
+      );
+
+
+  document.getElementById(
+    "totalSpent"
+  ).textContent =
+    "£" +
+    totalSpent.toFixed(2);
+
+
+  /*
+    Example safe-to-spend calculation.
+
+    In a real application this would also
+    account for upcoming bills, income,
+    savings targets and recurring expenses.
+  */
+
+  const monthlyIncome = 4280;
+
+  const savings = 856;
+
+  const safe =
+    monthlyIncome -
+    totalSpent -
+    savings;
+
+
+  document.getElementById(
+    "safeToSpend"
+  ).textContent =
+    "£" +
+    Math.max(
+      safe,
+      0
+    ).toFixed(2);
+
+}
+
+
+/*
+  CLEAR FORM
+*/
+
+function clearForm() {
+
+  document.getElementById(
+    "amount"
+  ).value = "";
+
+  document.getElementById(
+    "merchant"
+  ).value = "";
+
+  document.getElementById(
+    "note"
+  ).value = "";
+
+  document.getElementById(
+    "customCategory"
+  ).value = "";
+
+  selectedCategory = null;
+
+}
+
+
+/*
+  TOAST
+*/
+
+function showToast(message) {
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent =
+    message;
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  setTimeout(() => {
+
+    toast.classList.remove(
+      "show"
+    );
+
+  }, 2200);
+
+}
+
+
+/*
+  SECURITY:
+  Escape user-entered text before
+  putting it into innerHTML.
+*/
+
+function escapeHtml(value) {
+
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/*
+  CLOSE MODAL WHEN CLICKING OUTSIDE
+*/
+
+document
+  .getElementById(
+    "transactionModal"
+  )
+  .addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target.id ===
+        "transactionModal"
+      ) {
+
+        closeTransactionModal();
+
+      }
+
+    }
+  );
+
+
+/*
+  INITIAL RENDER
+*/
+
+renderCategoryPicker();
+
+renderTransactions();
+
+renderBudgets();
+
+updateDashboard();
+
 </script>
+
 </body>
 </html>
